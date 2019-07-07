@@ -11,8 +11,7 @@ mc = LargeMotor('outC')
 #Sensors
 ts = TouchSensor('in2')
 
-cl = ColorSensor('in3')
-cl.mode = 'COL-REFLECT'
+ls = LightSensor('in3')
 
 us = UltrasonicSensor('in4')
 units = us.units
@@ -21,22 +20,25 @@ lcd = Screen()
 lcd.draw.text((48,13),'Hello, world.')
 lcd.update()
 
+target = 40
+
 while not ts.value():    # Stop program by pressing touch sensor button
     distance = us.value()
-    color = cl.reflected_light_intensity
-    if color < 30: #Turn Right
+    color = ls.reflected_light_intensity
+    if color < 40: #Turn Right
         mb.run_forever(speed_sp=400)
         mc.run_forever(speed_sp=-150)
-    elif color > 70: #Turn Left
-        mb.run_forever(speed_sp=-150)
-        mc.run_forever(speed_sp=400)
+        print(color)
+    elif color > 60: #Turn Left
+        mb.run_forever(speed_sp=-100)
+        mc.run_forever(speed_sp=350)
         print(color)
     else:
-        mb.run_forever(speed_sp=300+3*(50-color))
-        mc.run_forever(speed_sp=300-3*(50-color))
+        mb.run_forever(speed_sp=350+3*(target-color))
+        mc.run_forever(speed_sp=350-3*(target-color))
         print(color)
     if distance < 100:
-    	Leds.set_color(Leds.LEFT, Leds.RED)
+        Leds.set_color(Leds.LEFT, Leds.RED)
         mb.stop(stop_action="hold")
         mc.stop(stop_action="hold")
         break
