@@ -31,14 +31,49 @@ target = 40
 def avoid_object():
     Leds.set_color(Leds.LEFT, Leds.RED)
     Leds.set_color(Leds.RIGHT, Leds.RED)
-    mb.run_timed(time_sp=6000, speed_sp=400)
-    mc.run_timed(time_sp=6000, speed_sp=-150)
-    while mb.state == 'running':
-        time.sleep(5)
-    mb.run_timed(time_sp=6000, speed_sp=-150)
-    mc.run_timed(time_sp=6000, speed_sp=400)
-    while mb.state == 'running':
-        time.sleep(5)
+    mb.run_forever(speed_sp=10)
+    mc.run_forever(speed_sp=380)
+    sleep(1.25)
+    mb.run_forever(speed_sp=200)
+    mc.run_forever(speed_sp=200)
+    sleep(.7)
+    mb.run_forever(speed_sp=500)
+    mc.run_forever(speed_sp=80)
+    sleep(1.2)
+    mb.run_forever(speed_sp=200)
+    mc.run_forever(speed_sp=200)
+    sleep(1.3)
+    mb.run_forever(speed_sp=300)
+    mc.run_forever(speed_sp=50)
+    sleep(.8)
+    mb.run_forever(speed_sp=200)
+    mc.run_forever(speed_sp=200)
+    sleep(1)
+
+def house():
+    mb.run_forever(speed_sp=200)
+    mc.run_forever(speed_sp=200)
+    sleep(1.45)
+    mb.run_forever(speed_sp=0)
+    mc.run_forever(speed_sp=400)
+    sleep(1.1)
+    mb.run_forever(speed_sp=200)
+    mc.run_forever(speed_sp=200)
+    sleep(5.5)
+    mb.run_forever(speed_sp=-200)
+    mc.run_forever(speed_sp=-200)
+    sleep(7.7)
+    mb.run_forever(speed_sp=200)
+    mc.run_forever(speed_sp=200)
+    sleep(4.5)
+    mb.run_forever(speed_sp=400)
+    mc.run_forever(speed_sp=0)
+    sleep(1)
+    mb.run_forever(speed_sp=200)
+    mc.run_forever(speed_sp=200)
+    sleep(1)
+    mb.stop()
+    mc.stop()
 
 while not ts.value():    # Stop program by pressing touch sensor button
     distance = us.value()
@@ -49,30 +84,31 @@ while not ts.value():    # Stop program by pressing touch sensor button
     if light < 40: #Turn Right
         if distance < 200:
             avoid_object()
-            sleep(5)
         else:
             mb.run_forever(speed_sp=400)
             mc.run_forever(speed_sp=-150)
     elif light > 60: #Turn Left
         if distance < 200: 
             avoid_object()
-            sleep(5)
         else:
             mb.run_forever(speed_sp=-100)
             mc.run_forever(speed_sp=350)
     else:
         if distance < 200:
             avoid_object()
-            sleep(5)
         else:
             mb.run_forever(speed_sp=350+3*(target-light))
             mc.run_forever(speed_sp=350-3*(target-light))
             print(colors[cl.value()])
     if colors[cl.value()] == 'red':
         Sound.beep()
-        break
+        mb.run_forever(speed_sp=0)
+        mc.run_forever(speed_sp=0)
+        sleep(2)
+        house()
     if colors[cl.value()] == 'green':
         Sound.beep()
+        print("Beeped")
 
 Sound.beep()
 Leds.set_color(Leds.LEFT, Leds.GREEN)  #set left led green before exiting
